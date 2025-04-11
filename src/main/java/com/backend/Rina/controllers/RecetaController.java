@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/recetas")
 public class RecetaController {
@@ -111,7 +112,6 @@ public class RecetaController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Receta> crearRecetaConImagen(
             @RequestPart("receta") Receta receta,
