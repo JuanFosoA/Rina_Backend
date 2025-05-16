@@ -10,6 +10,7 @@ public class Menu {
 
     @Id
     private String id;
+    private String name;
 
     private Map<String, Map<String, String>> dias;
 
@@ -25,6 +26,13 @@ public class Menu {
 
     public void setId(String id) {
         this.id = id;
+    }
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Map<String, Map<String, String>> getDias() {
