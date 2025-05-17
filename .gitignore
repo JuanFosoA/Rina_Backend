@@ -1,8 +1,10 @@
 HELP.md
-###target/
-###!.mvn/wrapper/maven-wrapper.jar
-###!**/src/main/**/target/
-###!**/src/test/**/target/
+
+### Maven ###
+target/                  # Ignora la carpeta target/ en la raíz
+!.mvn/wrapper/maven-wrapper.jar  # Excepción: este archivo SÍ se incluirá
+**/src/main/**/target/   # Ignora target/ en cualquier nivel dentro de src/main/
+**/src/test/**/target/   # Ignora target/ en cualquier nivel dentro de src/test/
 
 ### STS ###
 .apt_generated
