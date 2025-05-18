@@ -3,6 +3,7 @@ package com.backend.Rina.controllers;
 import com.backend.Rina.models.Menu;
 import com.backend.Rina.services.MenuService;
 import com.backend.Rina.services.WeeklyMenuList;
+import lombok.ToString;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

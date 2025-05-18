@@ -8,22 +8,30 @@ import java.time.LocalDate;
 @Document(collection = "Weekly_menus")
 public class WeeklyMenu {
     @Id
-    private String id;
+    private String userId;
     private LocalDate mondayOfWeek;
     private String menuId;
 
-    public WeeklyMenu(String id, LocalDate mondayOfWeek, String menuId) {
-        this.id = id;
+    public WeeklyMenu(String userId, LocalDate mondayOfWeek, String menuId) {
+        this.userId = userId;
         this.mondayOfWeek = mondayOfWeek;
         this.menuId = menuId;
     }
 
     public String getId() {
-        return id;
+        return userId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public LocalDate getMondayOfWeek() {
