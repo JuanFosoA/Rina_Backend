@@ -1,6 +1,7 @@
 package com.backend.Rina.controllers;
 
 import com.backend.Rina.models.Menu;
+import com.backend.Rina.security.jwt.JwtUtils;
 import com.backend.Rina.services.MenuService;
 import com.backend.Rina.services.WeeklyMenuList;
 import lombok.ToString;
@@ -21,6 +22,9 @@ public class MenuController {
     private MenuService menuService;
 
     @Autowired
+    JwtUtils jwtUtils;
+
+    @Autowired
     private WeeklyMenuList weeklyMenuList;
 
     @GetMapping
@@ -29,7 +33,13 @@ public class MenuController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Menu> getMenuById(@PathVariable String id) {
+    public Optional<Menu> getMenuById(@PathVariable String id, @RequestHeader("Authorization") String authHeader) {
+
+//        System.out.println(" El autenticado: " + authHeader);
+//        String token = authHeader.substring(7);
+//        String userId = jwtUtils.extractUserId(token);
+//        System.out.println("ID del usuario autenticado: " + userId);
+
         return menuService.getMenuById(id);
     }
 

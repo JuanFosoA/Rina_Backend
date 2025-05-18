@@ -73,9 +73,7 @@ public class WebSecurityConfig {
                                 "/api/recetas/**",
                                 "/uploads/**",
                                 "/api/devices/**",
-                                "/static/**",
-                                "/api/menus",
-                                "/api/menus/**"
+                                "/static/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
