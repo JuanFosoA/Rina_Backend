@@ -2,6 +2,7 @@ package com.backend.Rina.controllers;
 
 import com.backend.Rina.models.Menu;
 import com.backend.Rina.security.jwt.JwtUtils;
+import com.backend.Rina.services.ExpoPushNotificationService;
 import com.backend.Rina.services.MenuService;
 import com.backend.Rina.services.WeeklyMenuList;
 import lombok.ToString;
@@ -17,12 +18,14 @@ import java.util.Optional;
 @RequestMapping("/api/menus")
 public class MenuController {
 
+    @Autowired
+    JwtUtils jwtUtils;
 
     @Autowired
     private MenuService menuService;
 
     @Autowired
-    JwtUtils jwtUtils;
+    private ExpoPushNotificationService expoService;
 
     @Autowired
     private WeeklyMenuList weeklyMenuList;
@@ -44,9 +47,19 @@ public class MenuController {
     }
 
     @PostMapping
-    public Menu createMenu(@RequestBody Menu menu) {
-        System.out.println(menu);
-        return menuService.createMenu(menu);
+    public Menu createMenu(@RequestBody Menu menu,
+                           @RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.substring(7);
+        String userId = jwtUtils.extractUserId(token);
+        Menu createdMenu = menuService.createMenu(menu);
+
+        expoService.sendPushNotification(
+                userId,
+                "Nuevo Menú Creado",
+                "Se ha creado el menú: " + createdMenu.getName()
+        );
+
+        return createdMenu;
     }
 
     @PostMapping("/listaDeCompra")

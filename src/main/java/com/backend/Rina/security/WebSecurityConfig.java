@@ -72,7 +72,7 @@ public class WebSecurityConfig {
                                 "/api/auth/**",
                                 "/api/recetas/**",
                                 "/uploads/**",
-                                "/api/devices/**",
+                                "/api/expo-tokens/**",
                                 "/static/**"
                         ).permitAll()
                         .anyRequest().authenticated()
