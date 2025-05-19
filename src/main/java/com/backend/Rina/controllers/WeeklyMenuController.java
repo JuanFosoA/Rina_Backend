@@ -1,7 +1,9 @@
 package com.backend.Rina.controllers;
 
 import com.backend.Rina.models.WeeklyMenu;
+import com.backend.Rina.security.jwt.JwtUtils;
 import com.backend.Rina.services.WeeklyMenuService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +14,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/weekly-menu")
 public class WeeklyMenuController {
+    @Autowired
+    JwtUtils jwtUtils;
+
 
     private final WeeklyMenuService service;
 
@@ -21,9 +26,11 @@ public class WeeklyMenuController {
 
     @PostMapping
     public ResponseEntity<?> createMenu(
-            @RequestBody Map<String, String> payload,
-            Principal principal
+            @RequestBody Map<String, String> payload
+            , @RequestHeader("Authorization") String authHeader
     ) {
+        String token = authHeader.substring(7);
+        String userId = jwtUtils.extractUserId(token);
         String dateStr = payload.get("date");
         String menuId = payload.get("menuId");
 
@@ -32,7 +39,6 @@ public class WeeklyMenuController {
         }
 
         LocalDate date = LocalDate.parse(dateStr);
-        String userId = principal.getName(); // JWT debe inyectar username como userId
 
         WeeklyMenu savedMenu = service.createMenu(userId, date, menuId);
         return ResponseEntity.ok(savedMenu);
@@ -40,11 +46,11 @@ public class WeeklyMenuController {
 
     @GetMapping
     public ResponseEntity<?> getMenuByDate(
-            @RequestParam("date") String dateStr,
-            Principal principal
+            @RequestParam("date") String dateStr, @RequestHeader("Authorization") String authHeader
     ) {
         LocalDate date = LocalDate.parse(dateStr);
-        String userId = principal.getName();
+        String token = authHeader.substring(7);
+        String userId = jwtUtils.extractUserId(token);
 
         return service.getMenuForUserByDate(userId, date)
                 .map(ResponseEntity::ok)

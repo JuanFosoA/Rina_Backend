@@ -24,5 +24,9 @@ public class MenuService {
     public Menu createMenu(Menu menu) {
         return menuRepository.save(menu);
     }
+    public List<Menu> getMenusByUser(String userId) {
+        return menuRepository.findByUser(userId);
+    }
+
 
 }

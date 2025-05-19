@@ -31,18 +31,14 @@ public class MenuController {
     private WeeklyMenuList weeklyMenuList;
 
     @GetMapping
-    public List<Menu> getAllMenus() {
-        return menuService.getAllMenus();
+    public List<Menu> getAllMenus(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.substring(7);
+        String userId = jwtUtils.extractUserId(token);
+        return menuService.getMenusByUser(userId);
     }
 
     @GetMapping("/{id}")
-    public Optional<Menu> getMenuById(@PathVariable String id, @RequestHeader("Authorization") String authHeader) {
-
-//        System.out.println(" El autenticado: " + authHeader);
-//        String token = authHeader.substring(7);
-//        String userId = jwtUtils.extractUserId(token);
-//        System.out.println("ID del usuario autenticado: " + userId);
-
+    public Optional<Menu> getMenuById(@PathVariable String id) {
         return menuService.getMenuById(id);
     }
 
@@ -51,6 +47,8 @@ public class MenuController {
                            @RequestHeader("Authorization") String authHeader) {
         String token = authHeader.substring(7);
         String userId = jwtUtils.extractUserId(token);
+        menu.setUser(userId);
+
         Menu createdMenu = menuService.createMenu(menu);
 
         expoService.sendPushNotification(
