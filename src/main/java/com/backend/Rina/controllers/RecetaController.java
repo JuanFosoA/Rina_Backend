@@ -167,15 +167,13 @@ public class RecetaController {
     }
 
     @GetMapping("/buscar")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<List<Receta>> buscarRecetas(
-            @RequestParam(required = false) String nombre,
-            @RequestParam(required = false) List<String> categorias) {
+            @RequestParam(required = false) String nombre)
+             {
 
         if (nombre != null && !nombre.isEmpty()) {
             return new ResponseEntity<>(recetaService.buscarPorNombre(nombre), HttpStatus.OK);
-        } else if (categorias != null && !categorias.isEmpty()) {
-            return new ResponseEntity<>(recetaService.buscarPorCategoria(categorias), HttpStatus.OK);
         }
         return new ResponseEntity<>(recetaService.obtenerTodasLasRecetas(), HttpStatus.OK);
     }
