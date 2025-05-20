@@ -1,29 +1,40 @@
 package com.backend.Rina.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
+import java.util.Date;
+
 
 @Document(collection = "Weekly_menus")
 public class WeeklyMenu {
     @Id
+    private String Id;
+    @JsonIgnore
     private String userId;
-    private LocalDate mondayOfWeek;
+    private Date mondayOfWeek;
     private String menuId;
 
-    public WeeklyMenu(String userId, LocalDate mondayOfWeek, String menuId) {
+    public WeeklyMenu(String id, String userId, Date mondayOfWeek, String menuId) {
+        Id = id;
+        this.userId = userId;
+        this.mondayOfWeek = mondayOfWeek;
+        this.menuId = menuId;
+    }
+
+    public WeeklyMenu(String userId, Date mondayOfWeek, String menuId) {
         this.userId = userId;
         this.mondayOfWeek = mondayOfWeek;
         this.menuId = menuId;
     }
 
     public String getId() {
-        return userId;
+        return Id;
     }
 
-    public void setId(String userId) {
-        this.userId = userId;
+    public void setId(String id) {
+        Id = id;
     }
 
     public String getUserId() {
@@ -34,11 +45,11 @@ public class WeeklyMenu {
         this.userId = userId;
     }
 
-    public LocalDate getMondayOfWeek() {
+    public Date getMondayOfWeek() {
         return mondayOfWeek;
     }
 
-    public void setMondayOfWeek(LocalDate mondayOfWeek) {
+    public void setMondayOfWeek(Date mondayOfWeek) {
         this.mondayOfWeek = mondayOfWeek;
     }
 

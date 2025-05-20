@@ -6,9 +6,11 @@ import com.backend.Rina.services.WeeklyMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.security.Principal;
-import java.time.LocalDate;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 @RestController
@@ -16,7 +18,7 @@ import java.util.Map;
 public class WeeklyMenuController {
     @Autowired
     JwtUtils jwtUtils;
-
+    private static final Logger logger = LoggerFactory.getLogger(WeeklyMenuController.class);
 
     private final WeeklyMenuService service;
 
@@ -25,9 +27,9 @@ public class WeeklyMenuController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createMenu(
-            @RequestBody Map<String, String> payload
-            , @RequestHeader("Authorization") String authHeader
+    public ResponseEntity<?> createOrUpdateMenu(
+            @RequestBody Map<String, String> payload,
+            @RequestHeader("Authorization") String authHeader
     ) {
         String token = authHeader.substring(7);
         String userId = jwtUtils.extractUserId(token);
@@ -38,22 +40,36 @@ public class WeeklyMenuController {
             return ResponseEntity.badRequest().body("Missing date or menuId");
         }
 
-        LocalDate date = LocalDate.parse(dateStr);
+        Date inputDate;
+        try {
+            inputDate = new SimpleDateFormat("yyyy-MM-dd").parse(dateStr);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Invalid date format. Use yyyy-MM-dd");
+        }
 
-        WeeklyMenu savedMenu = service.createMenu(userId, date, menuId);
+        WeeklyMenu savedMenu = service.createOrUpdateMenu(userId, inputDate, menuId);
         return ResponseEntity.ok(savedMenu);
     }
 
     @GetMapping
     public ResponseEntity<?> getMenuByDate(
-            @RequestParam("date") String dateStr, @RequestHeader("Authorization") String authHeader
+            @RequestParam("date") String dateStr,
+            @RequestHeader("Authorization") String authHeader
     ) {
-        LocalDate date = LocalDate.parse(dateStr);
+        Date inputDate;
+        try {
+            inputDate = new SimpleDateFormat("yyyy-MM-dd").parse(dateStr);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Invalid date format. Use yyyy-MM-dd");
+        }
+
         String token = authHeader.substring(7);
         String userId = jwtUtils.extractUserId(token);
 
-        return service.getMenuForUserByDate(userId, date)
+        return service.getMenuForUserByDate(userId, inputDate)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+
 }
