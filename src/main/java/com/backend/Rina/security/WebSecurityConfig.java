@@ -71,6 +71,7 @@ public class WebSecurityConfig {
                         .requestMatchers(
                                 "/api/auth/**",
                                 "/api/recetas/**",
+                                "/api/recetas/imagen/**",
                                 "/uploads/**",
                                 "/api/expo-tokens/**",
                                 "/static/**"
